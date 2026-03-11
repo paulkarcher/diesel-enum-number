@@ -1,0 +1,20 @@
+[package]
+name = "diesel-enum-number"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.86"
+description = "Attribute macro to allow diesel to use number based enums in postgres"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/paulkarcher/diesel-enum-number"
+keywords = ["diesel", "enum", "postgres", "sql", "smallint"]
+categories = ["database"]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "2", features = ["full"] }
+quote = "1"
+
+[dev-dependencies]
+diesel = { version = "2", features = ["postgres"] }
