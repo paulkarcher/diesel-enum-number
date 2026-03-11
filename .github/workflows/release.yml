@@ -8,6 +8,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: crates-io
     permissions:
       id-token: write   # required for OIDC trusted publishing to crates.io
       contents: write   # required to create GitHub releases
