@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # required for OIDC trusted publishing to crates.io
+      contents: write   # required to create GitHub releases
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost/postgres
+      CARGO_TERM_COLOR: always
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Verify Cargo.toml version matches tag
+        run: |
+          CARGO_VERSION="v$(grep '^version' Cargo.toml | head -1 | sed 's/.*"\(.*\)".*/\1/')"
+          TAG="${{ github.ref_name }}"
+          if [ "$CARGO_VERSION" != "$TAG" ]; then
+            echo "Cargo.toml version ($CARGO_VERSION) does not match tag ($TAG)"
+            exit 1
+          fi
+
+      - name: Run tests
+        run: cargo test
+
+      - name: Authenticate with crates.io
+        uses: rust-lang/crates-io-auth-action@v1
+        id: auth
+
+      - name: Publish to crates.io
+        run: cargo publish --token ${{ steps.auth.outputs.token }}
+
+      - name: Create GitHub release
+        uses: taiki-e/create-gh-release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
