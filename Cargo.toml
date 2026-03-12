@@ -1,6 +1,6 @@
 [package]
 name = "diesel-enum-number"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2024"
 rust-version = "1.86"
 description = "Attribute macro to allow diesel to use number based enums in postgres"
