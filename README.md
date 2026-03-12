@@ -2,7 +2,7 @@
 
 Maps Rust enums with explicit integer discriminants to PostgreSQL `SMALLINT` columns via diesel.
 This code was adapted from a declarative macro that worked the same way but was not available as an attribute
-which became a bit of a pain when leveraging on type generation via [typeshare](https://github.com/1Password/typeshare)
+which became a bit of a pain when leveraging with type generation via [typeshare](https://github.com/1Password/typeshare)
 due to limitations with attaching the attribute to the generated enum.
 
 ## Usage
