@@ -62,4 +62,4 @@ Currently only PostgreSQL is supported. Support for MySQL and SQLite may be adde
 
 ## License
 
-MIT OR Apache-2.0
+MIT
